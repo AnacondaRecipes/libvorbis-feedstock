@@ -13,23 +13,24 @@ source:
 
 build:
   number: 1
+  run_exports:
+    # https://abi-laboratory.pro/index.php?view=timeline&l=libvorbis
+    - {{ pin_subpackage('libvorbis') }}
 
 requirements:
   build:
     - cmake  # [win]
     - {{ compiler('c') }}
+    - make  # [unix]
   host:
     - libogg
   run:
-    - libogg
+    - {{ pin_compatible('libogg') }}
 
 test:
   requires:
     - python {{ environ['PY_VER'] + '*' }}  # [win]
   commands:
-    - test -f $PREFIX/lib/libvorbis.la  # [unix]
-    - test -f $PREFIX/lib/libvorbisenc.la  # [unix]
-    - test -f $PREFIX/lib/libvorbisfile.la  # [unix]
     - test -f $PREFIX/lib/libvorbis.dylib  # [osx]
     - test -f $PREFIX/lib/libvorbisenc.dylib  # [osx]
     - test -f $PREFIX/lib/libvorbisfile.dylib  # [osx]
